@@ -44,10 +44,6 @@ public class Driver {
 
             ga.doEvolution();
 
-
-
-
-
             for (Edge e :g.edges()){
                 System.out.println(e.toString());
             }

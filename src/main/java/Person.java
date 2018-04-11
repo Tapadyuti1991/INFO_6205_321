@@ -1,8 +1,10 @@
 public class Person {
-    Gene g;
+    Chromosome ch;
 
-    Person(Gene g){
-        this.g = g;
+    Person(Chromosome ch){
+        this.ch = ch;
     }
+
+
 
 }

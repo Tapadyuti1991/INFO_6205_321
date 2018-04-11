@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class SolutionGeneticAlgo {
@@ -24,7 +25,7 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 }
 
     private void addPersonToPopulation(Person p) {
-
+        population.add(p);
     }
 
 //    public int hash(int key)
@@ -34,11 +35,31 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 
     private Person makeChromosomeofEachIndivdual() {
         Random r = new Random();
+        Double totalTime = 0.0;
+        ArrayList<Gene> personChromosome = new ArrayList<Gene>();
+        while(totalTime < 960) {
+            int activityNo = r.nextInt(graph.getTotalNode() + 1);
+            Gene g = geneST.genePool[activityNo];
+            totalTime += g.timeTaken;
+            if(totalTime < 960){
+                personChromosome.add(g);
+            }
+            else{
 
-        int activity = r.nextInt(graph.getTotalNode()+1);
+                ArrayList<Gene> fillRemainingGene = new ArrayList<Gene>() ;
+                for(Gene tempG: geneST.genePool){
+                    if(tempG.timeTaken < )
+                }
 
+            }
+        }
+        Person p = new Person(new Chromosome(personChromosome));
+
+        return p;
 
     }
+
+
 
 
 }
