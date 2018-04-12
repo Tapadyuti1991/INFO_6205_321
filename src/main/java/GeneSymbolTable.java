@@ -1,8 +1,9 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class GeneSymbolTable {
-    public int M; //  Hash Table  Size
+    private int M; //  Hash Table  Size
     public String [] activity;
     public Double [] timeTaken;
     public Double [] reward;
@@ -15,13 +16,17 @@ public class GeneSymbolTable {
         this.activity = activity;
         this.timeTaken = timeTaken;
         this.reward = reward;
+        genePool = new Gene [M];
         makeSymbolTable();
-        for(int i = 0 ; i <M ; i++){
+        for(int i = 0 ; i < M ; i++){
             String dna = hash(i);
+//            System.out.println("Hash Created .. ");
             genePool[i] = new Gene(dna,activity[i],timeTaken[i],reward[i]);
         }
+        System.out.println("Gene Symbol Table creation Done ..");
     }
 
+    public int size(){return M;}
     private void makeSymbolTable() {
         String a = "A";
         String g = "G";
@@ -33,9 +38,14 @@ public class GeneSymbolTable {
             int k = 4;
             createAllLength(set1, k);
         }
-
-        String [] dnaAll = (String[]) base.toArray();
-
+        System.out.println(base);
+        dnaAll = new String[base.size()];
+        int count = 0;
+        for(String geneName : base){
+            dnaAll[count] = geneName;
+            count++;
+        }
+        System.out.println(" Make Symbol Table Done .. ");
     }
 
     public void createAllLength(char set[], int k) {
@@ -55,8 +65,10 @@ public class GeneSymbolTable {
     }
 
     public String hash(Integer i){
-
-        return dnaAll[(i.hashCode()& 0x7fffffff)%M];
+         Random r = new Random ();
+         int j = r.nextInt(M);
+//         System.out.println(j);
+        return dnaAll[j];
 
     }
 

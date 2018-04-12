@@ -1,5 +1,7 @@
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 /******************************************************************************************************************************************
@@ -30,7 +32,7 @@ public class Driver {
     static GeneSymbolTable geneST;
 
 
-    public static void main(String args[])  {
+    public static void main(String args[]) throws IOException, InvalidFormatException {
         // 1. Load Data from Excel Sheet ans Initialise Gene Symbol Table
         int totalNodes  = LoadDataFromExcelSheet();
         //2. Initilialise the Weighted Activity Graph
@@ -41,12 +43,31 @@ public class Driver {
             fillDatainGraph(g, totalNodes);
 
             SolutionGeneticAlgo ga = new SolutionGeneticAlgo(g,geneST); //
+            //START *******TESTING PURPOSE ONLY ****************************
+            System.out.println("Total Colony Created " + ga.population.getColonyCount());
 
+            int Ccount = 0;
+            for(Colony c :ga.population.colonies()) {
+                System.out.println("Colony :"+ Ccount);Ccount++;
+                int pCount = 0;
+                for(Person p:c.getAllPerson()){
+                    System.out.print("Person "+ pCount+ " ");pCount++;
+                    System.out.print(" Total Time :"+ p.getTotalTimeSpent());
+                    System.out.print("Total Reward Point "+ p.getTotalRewardFetched());
+                    System.out.print(p.getAllGeneSequence());
+                    System.out.println(" ");
+                }
+                System.out.println(" ");
+
+            }
+            //END *******TESTING PURPOSE ONLY ****************************
             ga.doEvolution();
 
-            for (Edge e :g.edges()){
-                System.out.println(e.toString());
-            }
+            //START Testing for All Edge Connection
+//            for (Edge e :g.edges()){
+//                System.out.println(e.toString());
+//            }
+            //END Testing for All Edge Connection
         }
     }
 
@@ -55,25 +76,22 @@ public class Driver {
             for(int j=0; j<n; j++) {
                 Double rewardPoint = loadValueofReward(i);
                 Double timeTaken = loadValueofTimeTaken(i);
-
-                Edge e = new Edge(i, j, rewardPoint,timeTaken);  //Creating Edge
-                g.addEdge(e);
+                if(i!=j) {
+                    Edge e = new Edge(i, j, rewardPoint, timeTaken);  //Creating Edge
+                    g.addEdge(e);
+                }
             }
         }
         System.out.println("Total Edges Created: "+ g.getTotalEdge());
         System.out.println("Total Nodes Created: "+ g.getTotalNode());
-
-
-
-
     }
 
     private static Double loadValueofTimeTaken(int i ) { return Timetaken[i]; }
 
     private static Double loadValueofReward(int i) { return Reward[i]; }
 
-    private static int LoadDataFromExcelSheet() {
-        try {
+    private static int LoadDataFromExcelSheet() throws IOException, InvalidFormatException {
+//        try {
             Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -109,6 +127,7 @@ public class Driver {
 
             }
 
+            System.out.println("Excel Import Done ");
             initialiseGeneSymbolTable(sheet.getLastRowNum());
 
 //        System.out.println("END");
@@ -118,10 +137,10 @@ public class Driver {
 //                System.out.println(Activity[i] + " "+ Timetaken[i]+ " "+ Reward[i]) ;}
 
             return sheet.getLastRowNum();
-        } catch (Exception e) {
-            System.out.println("Please Check the File Location");
-        }
-     return 0;
+//        } catch (Exception e) {
+//            System.out.println("Please Check the File Location"+ e);
+//        }
+//     return 0;
     }
 
     private static void initialiseGeneSymbolTable(int n) {
