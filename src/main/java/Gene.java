@@ -4,8 +4,11 @@ public class Gene {
     public String activity;
     public Double reward;
     public Double timeTaken;
+    public Gene nextGene;
+
 
     Gene(String dna,String activity,Double timeTaken,Double reward ){
+//        System.out.println("Inside Gene Constructor"+ timeTaken + reward);
         this.DNA = dna;
         this.timeTaken = timeTaken;
         this.reward = reward;
