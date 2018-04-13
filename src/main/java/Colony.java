@@ -8,9 +8,10 @@ public class Colony {
     Colony(int n){
         this.totalMaximumsize = n;
         this.size = 0;
+        this.nextColony = null;
     }
     
-    public int size(){return size;}
+    public int size(){return this.size;}
 
     public void deleteAllContentInColony(){
         this.firstPerson = null;
@@ -22,14 +23,21 @@ public class Colony {
     public Person getFirstPerson(){return firstPerson;}
     
     public boolean addPerson(Person newPerson){
-        if(size < totalMaximumsize) {
-
-            if(size == 0) {firstPerson = newPerson;lastPerson = newPerson;size++;return true;}
-
+        if(this.size < totalMaximumsize) {
+//            System.out.print(" cB"+this.size);
+            if(this.size == 0) {
+                newPerson.nextPerson = null;
+                newPerson.previousPerson = null;
+                firstPerson = newPerson;
+                lastPerson = newPerson;
+                this.size++;
+                return true;}
+            newPerson.nextPerson = null;
             newPerson.previousPerson = lastPerson;
             lastPerson.nextPerson = newPerson;
             this.lastPerson = newPerson;
             this.size++;
+//            System.out.print(" cA"+this.size);
             return true;
         }
         return false;
@@ -43,6 +51,7 @@ public class Colony {
             b.add(c);
             c = c.nextPerson;
         }
+//        System.out.println("Size of Bag Colony " + b.size());
         return b;
     }
     

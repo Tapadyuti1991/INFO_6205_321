@@ -1,6 +1,9 @@
+// Heap PQ 
+
+
 public class MaxPQ<Key extends Comparable<Key>>
 {
-    private Key[] pq;
+    private Key[] pq;  // heap-ordered complete binary tree
     private int N = 0;
     public MaxPQ(int maxN)
     {  pq = (Key[]) new Comparable[maxN+1];  }

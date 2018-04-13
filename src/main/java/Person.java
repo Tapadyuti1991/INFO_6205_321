@@ -1,10 +1,16 @@
-public class Person {
+public class Person implements Comparable<Person> {
     Chromosome ch;
     Person nextPerson;
     Person previousPerson;
+    private Double fitnessScore;
 
     Person(Chromosome ch){
         this.ch = ch;
+        this.fitnessScore = 0.0;
+    }
+
+    public void setFitnessScore (Double fitnessScore){
+        this.fitnessScore = fitnessScore;
     }
 
     public Double getTotalTimeSpent(){
@@ -32,5 +38,13 @@ public class Person {
     }
 
 
-
+    public int compareTo(Person o) {
+        if (this.getTotalRewardFetched() > o.getTotalRewardFetched()){
+            return 1;
+        }
+        else if (this.getTotalRewardFetched() < o.getTotalRewardFetched()){
+            return -1;
+        }
+        return 0;
+    }
 }
