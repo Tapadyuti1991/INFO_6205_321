@@ -1,35 +1,29 @@
+import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.jfree.ui.RefineryUtilities;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
 /******************************************************************************************************************************************
-/******************************HAPPINESS PURSUIT*******************************************************************************************
+/******************************THE**HAPPINESS**PURSUIT*******************************************************************************************
 /*********************************************MIGHTY***************************************************************************************/
 /*
-1.a genetic code (or use the four bases of DNA for simplicity) and a random generator/mutator of such codesP;
-2.gene expression: how do individual genes code for particular traits--a symbol table using a hash function?
-3.a fitness function--this is essentially a measure of how good a candidate (organism) solution is for the problem you have chosen to solve;
-4.a sort function (priority queue is best)--to order the organisms by their fitness function;
-5.an evolution mechanism--this takes care of the seeding of generation 0, and the births and deaths between generation N and N+1;
-6.a logging function to keep track of the progress of the evolution, including the best candidate from the final generation;
-7.a set of unit tests which ensure that the various components are operating properly;
-8.(optional) a parallel computation mechanism so that you can divide your population up into colonies (sub-populations) and create the next
-   generations for each colony in parallel;
-9.(optional) a user interface to show the progress of the evolution
-//* TODO  Balance the Data
 //* Flow of DATA :
 //* In Each Generation it has : Population and it has : Colonies and it has : Persons and it has its own : Chromosome and it has :
     Set of Genes  : Represent Specific Activity Encoded by specific A-G-T-C Sequence which may or may not be same
     with other Person, as happens Naturally.
  */
-public class Driver {
-    public static final String SAMPLE_XLSX_FILE_PATH = ".\\HList.xlsx";
+public class Driver  {
+    public static final String SAMPLE_XLSX_FILE_PATH = ".\\HList.xlsx"; //Refer the Excel sheet for List of Activities
     static String [] Activity;
     static Double [] Timetaken;
     static Double [] Reward;
     static GeneSymbolTable geneST;
+    final static Logger logger = Logger.getLogger(Driver.class);
+
 
 
     public static void main(String args[]) throws IOException, InvalidFormatException {
@@ -48,20 +42,21 @@ public class Driver {
 
             int Ccount = 0;
             for(Colony c :ga.population.colonies()) {
-                System.out.println("Colony :"+ Ccount);Ccount++;
+                logger.info("Colony :"+ Ccount);Ccount++;
                 int pCount = 0;
                 for(Person p:c.getAllPerson()){
-                    System.out.print("Person "+ pCount+ " ");pCount++;
-                    System.out.print(" Total Time :"+ p.getTotalTimeSpent());
-                    System.out.print("Total Reward Point "+ p.getTotalRewardFetched());
-                    System.out.print(p.getAllGeneSequence());
-                    System.out.println(" ");
+                    logger.info("Person "+ pCount+ " ");pCount++;
+                    logger.info(" Total Time :"+ p.getTotalTimeSpent());
+                    logger.info("Total Reward Point "+ p.getfitnessScore());
+                    logger.info(p.getAllGeneSequence());
+                    logger.info(" ");
                 }
-                System.out.println(" ");
-
+                logger.info(" ");
             }
             //END *******TESTING PURPOSE ONLY ****************************
-            ga.doEvolution();
+            Double [] allFittestPerson  = ga.doEvolution();
+
+            makePlottingofResult(allFittestPerson);
 
             //START Testing for All Edge Connection
 //            for (Edge e :g.edges()){
@@ -69,6 +64,14 @@ public class Driver {
 //            }
             //END Testing for All Edge Connection
         }
+    }
+
+    private static void makePlottingofResult(Double[] allFittestPerson) {
+
+        PlottingTheResults pr = new PlottingTheResults("Genetic Algorithm - Best Person's Activity",allFittestPerson);
+        pr.pack( );
+        RefineryUtilities.centerFrameOnScreen( pr );
+        pr.setVisible( true );
     }
 
     private static void fillDatainGraph(ActivityNodeGraph g,int n) {
@@ -127,7 +130,7 @@ public class Driver {
 
             }
 
-            System.out.println("Excel Import Done ");
+            logger.info("Excel Import Done ");
             initialiseGeneSymbolTable(sheet.getLastRowNum());
 
 //        System.out.println("END");

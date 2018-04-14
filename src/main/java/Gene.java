@@ -12,7 +12,7 @@ public class Gene {
         this.DNA = dna;
         this.timeTaken = timeTaken;
         this.reward = reward;
-
+        this.activity = activity;
     }
 
 

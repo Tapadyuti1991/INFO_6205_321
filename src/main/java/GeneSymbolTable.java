@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -10,7 +12,7 @@ public class GeneSymbolTable {
     public Gene [] genePool;
     public String [] dnaAll;
     public ArrayList<String> base = new ArrayList<String>();
-
+    final static Logger logger = Logger.getLogger(Driver.class);
     public GeneSymbolTable(int M,String [] activity, Double[] timeTaken, Double [] reward){
         this.M = M;
         this.activity = activity;
@@ -23,7 +25,7 @@ public class GeneSymbolTable {
 //            System.out.println("Hash Created .. ");
             genePool[i] = new Gene(dna,activity[i],timeTaken[i],reward[i]);
         }
-        System.out.println("Gene Symbol Table creation Done ..");
+        logger.info("Gene Symbol Table creation Done ..");
     }
 
     public int size(){return M;}
@@ -45,7 +47,7 @@ public class GeneSymbolTable {
             dnaAll[count] = geneName;
             count++;
         }
-        System.out.println(" Make Symbol Table Done .. ");
+        logger.info(" Make Symbol Table Done .. ");
     }
 
     public void createAllLength(char set[], int k) {

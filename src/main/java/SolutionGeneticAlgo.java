@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +12,7 @@ public class SolutionGeneticAlgo {
     ActivityNodeGraph graph;
     GeneSymbolTable geneST;
     Population population;
+    final static Logger logger = Logger.getLogger(SolutionGeneticAlgo.class);
 
 //Constructor initialising all the Constraints and Generation -  0
 SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
@@ -23,56 +26,110 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
         addPersonToPopulation(p);
         initPopulation--;
     }
-
-    getThePhenotype(graph);
-
 }
 
-    private void getThePhenotype(ActivityNodeGraph graph) {
 
 
-    }
+    public Double[] doEvolution(){
 
-    public void doEvolution(){
-    System.out.println("Evolution Process Started ... ");
-    int noOfEvolution = 1;
+    logger.info("Evolution Process Started ... ");
+    int noOfEvolution = 0;
+    Double [] allBestPerson = new Double[Configuration.numberOfEvolution];
     while(noOfEvolution < Configuration.numberOfEvolution){
-        System.out.println("************************************************");
-        System.out.println("Generation"+ noOfEvolution);
+        logger.info("************************************************");
+        logger.info("Generation"+ noOfEvolution);
         breedTheCurrentPopulation(population);
 //        testtheCurrentPopulation(noOfEvolution);
 //        applySurvivalOfFittest(population,noOfEvolution);
-        getThemostFittestPerson(population);
-        testtheCurrentPopulation(noOfEvolution);
+        Double bp = getThemostFittestPerson(population);
+        allBestPerson[noOfEvolution] = bp;
+//        testtheCurrentPopulation(noOfEvolution);
         noOfEvolution++;
     }
+
+    return allBestPerson;
 }
 
-    private void getThemostFittestPerson(Population population) {
-            System.out.println("Getting Most Fittest Person check...");
+    private void breedTheCurrentPopulation(Population population) {
+//    Colony [] currentColonies = new Colony[population.getColonyCount()];
+//        System.out.println("Breeding the Current Population ....");
+        int countColony = 0;
+        ArrayList<Person> newGenAllPerson = new ArrayList<Person>();
+//        System.out.println("Current Colony Count before Breeding : "+ population.getColonyCount());
 
+        for(Colony c : population.colonies()){
+
+
+            breedIntraColony(c,newGenAllPerson);
+
+
+        }
+
+//        System.out.println("Current Colony Count After Breeding before Deleting old Pop. : "+ population.getColonyCount() + "Size"+ population.size);
+
+        population.deleteAllColony();
+
+//        System.out.println("Current Pop Size After Breeding After Deleting old Pop. : "+  population.getColonyCount() + "Size"+ population.size);
+
+        int popCount = 0;
+//        System.out.println("Total Number of New Persons to be added "+ newGenAllPerson.size());
+        for(Person p : newGenAllPerson) {
+            population.addPerson(p);
+//        System.out.println("Total Colony :" + population.getColonyCount()+" ");
+//
+//        int Ccount = 0;
+//        for(Colony c :population.colonies()) {
+//            System.out.print("Colony :" + Ccount+" ");
+//            Ccount++;
+//            System.out.println("NO. of Person in CoLony :" + c.size());
+//        }
+//        popCount ++;
+//        System.out.println("******");
+//        System.out.println("Adding New Persons to Population"+ popCount);
+        }
+
+//        System.out.println("Current Colony Count After Breeding after Deleting old Pop: "+ population.getColonyCount() + "Size " +population.size);
+//     breedInterColony(currentColonies);
+    }
+
+    public Double getThemostFittestPerson(Population population) {
+//            System.out.println("Getting Most Fittest Person...");
+            Double bestPerson = null;
             if(population.size > Configuration.MaximumNumberOfPopulation)
             {
-                System.out.println("Getting Most Fittest Person out of ..." + population.size);
+//                System.out.println("Getting Most Fittest Person out of ..." + population.size);
                 int minpqSize = (int)(population.size * Configuration.survivalRate);
                 MinPQ<Person> pq = new MinPQ<Person>(minpqSize+1);
+
                 for (Colony c : population.colonies()) {
+
                         for(Person p: c.getAllPerson()){
 //                            System.out.print(" TT :"+ p.getTotalTimeSpent());
-//                            System.out.print(" TRP:  "+ p.getTotalRewardFetched());
+//                            System.out.print(" TRP:  "+ p.getfitnessScore());
 //                            System.out.print(p.getAllGeneSequence());
                             pq.insert(p);
+
                             if(pq.size() > minpqSize){
                                 Person delp = pq.delMin();
-//                                System.out.println("Person with "+ delp.getTotalRewardFetched()+"Points deleted ");
+//                                System.out.println("Person with "+ delp.getfitnessScore()+"Points deleted ");
                             }
                         }
                 }
                 ArrayList<Person> p = new ArrayList<Person>();
 //                System.out.println("Most Fittest Person on the Current Generation");
                 while (!pq.isEmpty()) p.add(pq.delMin());
+                Person bPerson = p.get(p.size()-1);
+                bestPerson = p.get(p.size()-1).getfitnessScore();
+                logger.info("Best Fitness Score: "+ p.get(p.size()-1).getfitnessScore()/960.0);
+                logger.info("Activity List Done in 16 Hours ");
+                logger.info(bPerson.getAllGeneSequence());
+                String act = "";
+                for(Gene g : bPerson.ch.genePool){
+                    act += g.activity+ "|";
+                }
+                logger.info(act);
                 population.deleteAllColony();
-                System.out.println("Population Colony Count <<<< "+ population.getColonyCount() + "Size " +population.size);
+//                System.out.println("Population Colony Count <<<< "+ population.getColonyCount() + "Size " +population.size);
                 Person [] randP = new Person[p.size()];
                 int randCount = 0;
                 for(Person randPerson:p){
@@ -93,143 +150,157 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
                 for(int i=0;i<randP.length;i++){
                     population.addPerson(randP[i]);
                 }
-                System.out.println("Population Colony Count <<<< "+ population.getColonyCount() + "Size " +population.size);
+//                System.out.println("Population Colony Count <<<< "+ population.getColonyCount() + "Size " +population.size);
             }
-        System.out.println("Getting Most Fittest Person done...");
-    }
-
-
-
-    private void breedTheCurrentPopulation(Population population) {
-//    Colony [] currentColonies = new Colony[population.getColonyCount()];
-        System.out.println("Breeding the Current Population ....");
-    int countColony = 0;
-    ArrayList<Person> newGenAllPerson = new ArrayList<Person>();
-    System.out.println("Current Colony Count before Breeding : "+ population.getColonyCount());
-
-    for(Colony c : population.colonies()){
-        breedIntraColony(c,newGenAllPerson);
-    }
-
-    System.out.println("Current Colony Count After Breeding before Deleting old Pop. : "+ population.getColonyCount() + "Size"+ population.size);
-
-
-    population.deleteAllColony();
-    System.out.println("Current Pop Size After Breeding After Deleting old Pop. : "+  population.getColonyCount() + "Size"+ population.size);
-
-    int popCount = 0;
-    System.out.println("Total Number of New Persons to be added "+ newGenAllPerson.size());
-    for(Person p : newGenAllPerson) {
-        population.addPerson(p);
-//        System.out.println("Total Colony :" + population.getColonyCount()+" ");
-//
-//        int Ccount = 0;
-//        for(Colony c :population.colonies()) {
-//            System.out.print("Colony :" + Ccount+" ");
-//            Ccount++;
-//            System.out.println("NO. of Person in CoLony :" + c.size());
-//        }
-//        popCount ++;
-//        System.out.println("******");
-//        System.out.println("Adding New Persons to Population"+ popCount);
-    }
-
-    System.out.println("Current Colony Count After Breeding after Deleting old Pop: "+ population.getColonyCount() + "Size " +population.size);
-//     breedInterColony(currentColonies);
-    }
-
-
-    private void breedIntraColony(Colony c,ArrayList<Person>newGenAllPerson) {
-//            System.out.println("Breeding - INTRA Colony");
-            Person personArray [] = new Person[c.size()];
-            int pCount = 0;
-
-            for(Person p : c.getAllPerson()){
-                personArray[pCount] = p;pCount++;
+            else{
+//                System.out.println("Culling Skipped As Total Population < Maximum Expected ");
             }
+//        System.out.println("Getting Most Fittest Person done...");
+        return bestPerson;
+    }
+
+
+
+    public void breedIntraColony(Colony c,ArrayList<Person>newGenAllPerson) {
+//        System.out.println("Breeding - INTRA Colony");
+        Random r = new Random();
+        //**********Creating Person Array from Current Colony ****************
+        Person personArray [] = new Person[c.size()];
+        int pCount = 0;
+        for(Person p : c.getAllPerson()){ personArray[pCount] = p;pCount++; }
+        //*********************************************************************
 //            System.out.println("All Persons of Current Colony Copied ..."+ personArray.length);
-
-            Random r = new Random();
 //            System.out.println("Toal Size of GENR ST Table : " + geneST.size());
 //            System.out.println("Log of geneST Size "+ Math.log(geneST.size()));
 //            double allBinValue = geneST.size() *  Math.log10(geneST.size());
-
-            Map<Integer,ArrayList<Integer>> map = new HashMap();                       //n*(n-1)/2
-            int countTemp = 0;
-            ArrayList<Integer> personindex ;
-            for(int i = 0 ; i <personArray.length; i++){
-                for(int j = i+1 ; j <personArray.length; j++){
-                    personindex = new ArrayList<Integer>();
-                    personindex.add(i);
-                    personindex.add(j);
+        //***************************************************************************************************
+        //** Creating Map of consisting ALL Possible Pairs for Mating from Population ***********************
+        //***************************************************************************************************
+        Map<Integer,ArrayList<Integer>> map = new HashMap();                       //n*(n-1)/2 total Possible Pairs
+        int countTemp = 0;
+        ArrayList<Integer> personindex ;
+        for(int i = 0 ; i <personArray.length; i++){
+            for(int j = i+1 ; j <personArray.length; j++){
+                personindex = new ArrayList<Integer>();
+                personindex.add(i);
+                personindex.add(j);
 //                    System.out.println("Adding to Map "+ map.size());
-                    map.put(countTemp, personindex);
-                    countTemp++;
+                map.put(countTemp, personindex);
+                countTemp++;
 //                    System.out.println("Adding to Map "+ map.size());
-                }
             }
+        }
 //            System.out.println("Map Built");
-
 //            System.out.println("All Bin Value "+ (int)allBinValue);
-        //NOt Required ****
-//            int loopCount = 0;
-//            if (map.size() < (int)allBinValue ){ loopCount = map.size(); }
-//            else{ loopCount =  (int)allBinValue; }
-        //******
-
-
-
-            if(map.size() < Configuration.MaximumNumberOfPopulation){
-//                System.out.println("Creating Mutation == "+ map.size());
-                for(int i = 0 ; i <map.size();i++){
-                    ArrayList<Integer> index = map.get(i);
+                                                                                                                //NOt Required ****
+                                                                                                               //            int loopCount = 0;
+                                                                                                               //            if (map.size() < (int)allBinValue ){ loopCount = map.size(); }
+                                                                                                               //            else{ loopCount =  (int)allBinValue; }
+        //*************************************************************************************
+        //Size of Map Grows in Order of 4,6,15,105,5460 ..... in each generation
+        //Untill it is Less than expected total Number of Population , it loops  from 0 to Map.Size()
+        if(map.size() < 100){
+                System.out.println("Creating Mutation == "+ map.size());
+            for(int i = 0 ; i <map.size();i++){
+                ArrayList<Integer> index = map.get(i);
 //                    System.out.println("Mutation No. " + count + "Person Selected :" + index.get(0) + " " + index.get(1));
-                    ArrayList<Gene> child1Gene = new ArrayList<Gene>();
-                    ArrayList<Gene> child2Gene = new ArrayList<Gene>();
-                    domutation(personArray[index.get(0)], personArray[index.get(1)], child1Gene, child2Gene, newGenAllPerson);
-                }
+                ArrayList<Gene> child1Gene = new ArrayList<Gene>();
+                ArrayList<Gene> child2Gene = new ArrayList<Gene>();
+                domutation(personArray[index.get(0)], personArray[index.get(1)], child1Gene, child2Gene, newGenAllPerson);
             }
-            else {
+        }
+        // When Map.size() i.e. No of All Possible Pairs >
+        else {
 //                System.out.println("Creating Mutation == "+ Configuration.MaximumNumberOfPopulation/2*population.getColonyCount());
-                int count = 0;
-
-                while (count < 1000) {
-                    int s = map.size();
+//            System.out.println("Creating Mutation == 100");
+            int count = 0;
+            int [] random10num = new int [10];
+            for(int rc = 0; rc<random10num.length; rc++) random10num[rc] = r.nextInt(100);
+            boolean [] tomutate = new boolean[100];
+            for(int rc : random10num) tomutate[rc] = true;
+            /***************************************************/
+            while (count < 100) {
+                int s = map.size();
 //                    System.out.println( "Count "+ count);
-                    int index1 = r.nextInt(s);
+                int index1 = r.nextInt(s);
 ////                System.out.println("Random Number generated :"+ index1);
-                    ArrayList<Integer> index = map.get(index1);
-                    ArrayList<Gene> child1Gene = new ArrayList<Gene>();
-                    ArrayList<Gene> child2Gene = new ArrayList<Gene>();
+                ArrayList<Integer> index = map.get(index1);
+                ArrayList<Gene> child1Gene = new ArrayList<Gene>();
+                ArrayList<Gene> child2Gene = new ArrayList<Gene>();
 //
 //                    System.out.println("Mutation No. " + count + "Person Selected :" + index.get(0) + " " + index.get(1));
-                    domutation(personArray[index.get(0)], personArray[index.get(1)], child1Gene, child2Gene, newGenAllPerson);
-                    count++;
+                if (tomutate[count]){
+//                    System.out.print("mutate occurs");
+                domutation(personArray[index.get(0)], personArray[index.get(1)], child1Gene, child2Gene, newGenAllPerson);
                 }
+                else {
+                    if(count%2 ==0){
+                    donormalFission(personArray[index.get(0)], personArray[index.get(1)],child1Gene, child2Gene,newGenAllPerson);}
+                    else{
+                        domutation2(personArray[index.get(0)], personArray[index.get(1)],child1Gene, child2Gene,newGenAllPerson);
+                    }
+                }
+
+
+                count++;
             }
+        }
+    }
+
+    public void domutation2(Person person1, Person person2, ArrayList<Gene> child1Gene, ArrayList<Gene> child2Gene, ArrayList<Person> newGenAllPerson) {
+        Random r = new Random();
+        int [] random10num = new int [10];
+        for(int rc = 0; rc<random10num.length; rc++) random10num[rc] = r.nextInt(person1.ch.genePool.size());
+        boolean [] tomutate = new boolean[person1.ch.genePool.size()];
+        for(int rc : random10num) tomutate[rc] = true;
+
+        int countg1 = 0;
+//        System.out.print(" B4 MT value : "+ person1.getfitnessScore());
+        for(Gene g :person1.ch.genePool)
+            { if(tomutate[countg1]) {
+                double searchThatActivity = g.timeTaken;
+                ArrayList<Gene> tempGenePool = new ArrayList<Gene>();
+                for(Gene gp: geneST.genePool ){
+                    if(gp.timeTaken == searchThatActivity ){ tempGenePool.add(gp); }
+                }
+//                System.out.print("tempGP S: "+tempGenePool.size()+ "||");
+                int pickThatGene = r.nextInt(tempGenePool.size());
+                int tgeneCounter = 0;
+                for(Gene tgene: tempGenePool){
+                    if (pickThatGene == tgeneCounter ){ child1Gene.add(tgene);break; }
+                    tgeneCounter++;
+                }
+                }
+                else child1Gene.add(g);
+
+                countg1++;
+            }
+
+
+        for(Gene g :person2.ch.genePool) { child2Gene.add(g); }
+
+        Person p1 = new Person(new Chromosome(child1Gene));
+//        System.out.print(" After MT value : "+ p1.getfitnessScore());
+
+        Person p2 = new Person(new Chromosome(child2Gene));
+
+        newGenAllPerson.add(p1);
+        newGenAllPerson.add(p2);
+
+
+    }
+
+    public void donormalFission(Person person1, Person person2,ArrayList<Gene> child1Gene,ArrayList<Gene> child2Gene, ArrayList<Person> newGenAllPerson) {
+
+        for(Gene g :person1.ch.genePool) { child1Gene.add(g); }
+        for(Gene g :person2.ch.genePool) { child2Gene.add(g); }
+        Person p1 = new Person(new Chromosome(child1Gene));
+        Person p2 = new Person(new Chromosome(child2Gene));
+        newGenAllPerson.add(p1);
+        newGenAllPerson.add(p2);
 }
 
-    private void culltheUnfittest(ArrayList<Person> newGenAllPerson) {
 
-            System.out.println("Getting Most Fittest Person check...");
-            int minpqSize = (int)(newGenAllPerson.size()* Configuration.survivalRate);
-            MinPQ<Person> pq = new MinPQ<Person>(minpqSize + 1);
-
-            for(Person p: newGenAllPerson){
-                pq.insert(p);
-                if(pq.size() > minpqSize){
-                    Person delp = pq.delMin();
-//                    System.out.println("Person with "+ delp.getTotalRewardFetched()+"Points deleted ");
-                }
-            }
-
-            ArrayList<Person> p = new ArrayList<Person>();
-            System.out.println("Most Fittest Person on the Current Generation");
-            while (!pq.isEmpty()) p.add(pq.delMin());
-            for (Person t : p) {System.out.println(t.getTotalRewardFetched());}
-
-        System.out.println("Getting Most Fittest Person check DONE...");
-    }
 
     private void domutation(Person person1, Person person2,ArrayList<Gene> child1Gene,ArrayList<Gene> child2Gene,ArrayList<Person>newGenAllPerson ) {
 //    System.out.println("Mutation Started ...");
@@ -261,7 +332,13 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
         child2Gene = makeChildGene(child2Gene,Gene2cut1,Gene1cut2);
 //        System.out.print(" Child2 Gene Done|");
         Person p1 = new Person(new Chromosome(child1Gene));
-        Person p2 = new Person(new Chromosome(child1Gene));
+        Person p2 = new Person(new Chromosome(child2Gene));
+
+//        System.out.println("Parent Gene 1"+ person1.getAllGeneSequence());
+//        System.out.println("Child Gene 1"+ p1.getAllGeneSequence());
+//
+//        System.out.println("Parent Gene2"+ person2.getAllGeneSequence());
+//        System.out.println("Child Gene2"+ p2.getAllGeneSequence());
 //        System.out.print(" |TTchrom1 "+p1.getTotalTimeSpent());System.out.print(" |TTchrom2 "+p2.getTotalTimeSpent());
         newGenAllPerson.add(p1);
 //        System.out.println(" ");
@@ -289,7 +366,7 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
             else if(totalTimeTaken1 > 960.0){
                 double tempTimeRequired = Math.abs(960 - totalTimeTaken1) ;
 
-                child1Gene = mutateGene(child1Gene,currtotalTimeTaken1);
+                child1Gene = mutateGene(child1Gene,currtotalTimeTaken1,960);
                 break;
             }
             else if(totalTimeTaken1 == 960.0){child1Gene.add(g);
@@ -297,16 +374,16 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
             break;}
         }
         if(totalTimeTaken1 < 960){
-            child1Gene = mutateGene(child1Gene,totalTimeTaken1);
+            child1Gene = mutateGene(child1Gene,totalTimeTaken1,960);
         }
 //        System.out.println(" ");
         return child1Gene;
     }
 
-    private ArrayList<Gene> mutateGene(ArrayList<Gene> child1Gene, double totalTimeTaken1) {
-
+    private ArrayList<Gene> mutateGene(ArrayList<Gene> child1Gene, double totalTimeTaken1,double totalTimeLimit) {
+//            System.out.println("Mutate Gene Called ");
 //        double tempTimeRequired = Math.abs(totalTimeTaken1 - parentGene.timeTaken -960) ;
-        double tempTimeRequired = Math.abs(960 - totalTimeTaken1) ;
+        double tempTimeRequired = Math.abs(totalTimeLimit - totalTimeTaken1) ;
 //        System.out.print(" Current TS1 : "+ tempTimeRequired);
         for(Gene tempG: geneST.genePool){
             if(tempTimeRequired == 0.0) break;
@@ -317,13 +394,16 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 //                        System.out.println("Current TS : "+ tempTimeRequired);
             }
         }
+//        System.out.println("req: "+tempTimeRequired);
+        double timeCount = 0.0;
+        for(Gene g :child1Gene){timeCount += g.timeTaken;}
+        if(timeCount < totalTimeLimit){
+            double timeFill = totalTimeLimit - tempTimeRequired;
+            System.out.print("VacGenAdded: of "+ timeFill);
+            Gene vacantActivity = new Gene("OOOO","Vacant",timeFill,1.0);
+            child1Gene.add(vacantActivity);
+        }
         return child1Gene;
-    }
-
-
-    private void breedInterColony(Colony c) {
-
-
     }
 
 
@@ -337,7 +417,9 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 //        Double totalTime = 0.0;
         ArrayList<Gene> personChromosome = new ArrayList<Gene>();
         makefirstHalfGene(personChromosome);
+        logger.info("Half Gene Time ::"+new Person(new Chromosome(personChromosome)).getTotalTimeSpent());
         makeSecondHalfGene(personChromosome);
+        logger.info("  Full Gene Time ::"+new Person(new Chromosome(personChromosome)).getTotalTimeSpent());
 //        while(totalTime < 960) {
 //            int activityNo = r.nextInt(graph.getTotalNode());
 //            Gene g = geneST.genePool[activityNo];
@@ -369,7 +451,7 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 
     }
 
-    private void makefirstHalfGene(ArrayList<Gene> personChromosome) {
+    public void makefirstHalfGene(ArrayList<Gene> personChromosome) {
         Double totalTime = 0.0;
         Random r = new Random();
         while(totalTime < 480) {
@@ -385,22 +467,42 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
                 break;
             }
             else{
-
-                personChromosome = mutateGene(personChromosome,currTotaltime);
+                personChromosome = mutateGene(personChromosome,currTotaltime,480.0);
                 break;
             }
-
         }
-
     }
-    private void makeSecondHalfGene(ArrayList<Gene> personChromosome) {
+    public void makeSecondHalfGene(ArrayList<Gene> personChromosome) {
+        Double totalTime = 0.0;
+    if(480 == new Person(new Chromosome(personChromosome)).getTotalTimeSpent()){
+        totalTime = 480.0;
+        Random r = new Random();
+        while(totalTime < 960.0) {
+            int activityNo = r.nextInt(graph.getTotalNode());
+            Gene g = geneST.genePool[activityNo];
+            double currTotaltime = totalTime;
+            totalTime += g.timeTaken;
+//            System.out.print(totalTime + "|");
+            if(totalTime < 960.0){
+                personChromosome.add(g);
+            }
+            else if(totalTime == 960.0){
+                break;
+            }
+            else{
+                personChromosome = mutateGene(personChromosome,currTotaltime,960.0);
+                break;
+            }
+        }
+    }
     }
 
-    private boolean checkTotalTimeofChromosome(ArrayList<Gene> personChromosome) {
+    public boolean checkTotalTimeofChromosome(ArrayList<Gene> personChromosome) {
     Double totalTime = 0.0;
     for(Gene g :personChromosome){
         totalTime += g.timeTaken;
     }
+        logger.info("Total Time of ch :"+ totalTime);
     if(totalTime == 960.0){
         return true;
     }
@@ -417,15 +519,15 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
         for(Colony c :population.colonies()) {
             System.out.println("Colony :"+ Ccount);Ccount++;
             int pCount = 0;
-            System.out.println("NO. of Person in CoLony :"+ c.size());
+            System.out.print("NO. of Person in CoLony :"+ c.size());
             for(Person p:c.getAllPerson()){
-                System.out.print("Person "+ pCount+ " ");pCount++;
-                System.out.print(" Total Time :"+ p.getTotalTimeSpent());
-                System.out.print("Total Reward Point "+ p.getTotalRewardFetched());
-//                System.out.print(p.getAllGeneSequence());
-                System.out.println(" ");
+                System.out.println("Person "+ pCount+ " ");pCount++;
+                System.out.println(" Total Time :"+ p.getTotalTimeSpent());
+                System.out.println("Total Reward Point "+ p.getfitnessScore());
+                System.out.println(p.getAllGeneSequence());
+//                System.out.println(" ");
             }
-            System.out.println(" ");
+//            System.out.println(" ");
 
         }
 

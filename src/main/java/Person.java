@@ -2,16 +2,14 @@ public class Person implements Comparable<Person> {
     Chromosome ch;
     Person nextPerson;
     Person previousPerson;
-    private Double fitnessScore;
+
 
     Person(Chromosome ch){
         this.ch = ch;
-        this.fitnessScore = 0.0;
+
     }
 
-    public void setFitnessScore (Double fitnessScore){
-        this.fitnessScore = fitnessScore;
-    }
+
 
     public Double getTotalTimeSpent(){
         Double timeTaken = 0.0;
@@ -21,7 +19,7 @@ public class Person implements Comparable<Person> {
         return timeTaken;
     }
 
-    public Double getTotalRewardFetched(){
+    public Double getfitnessScore(){
         Double totalPoints = 0.0;
         for(Gene eachGene: ch.genePool){
             totalPoints += eachGene.reward;
@@ -39,10 +37,10 @@ public class Person implements Comparable<Person> {
 
 
     public int compareTo(Person o) {
-        if (this.getTotalRewardFetched() > o.getTotalRewardFetched()){
+        if (this.getfitnessScore() > o.getfitnessScore()){
             return 1;
         }
-        else if (this.getTotalRewardFetched() < o.getTotalRewardFetched()){
+        else if (this.getfitnessScore() < o.getfitnessScore()){
             return -1;
         }
         return 0;
