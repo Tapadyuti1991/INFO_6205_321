@@ -1,9 +1,8 @@
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 //DO Breeding in Parallel
 //8he constraint
@@ -13,6 +12,10 @@ public class SolutionGeneticAlgo {
     GeneSymbolTable geneST;
     Population population;
     final static Logger logger = Logger.getLogger(SolutionGeneticAlgo.class);
+
+    public  CompletableFuture<Colony> getCompetableFutureResult(Colony c,ArrayList<Person> newGenAllPerson) {
+        return  parsort(c,newGenAllPerson);
+    }
 
 //Constructor initialising all the Constraints and Generation -  0
 SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
@@ -57,13 +60,37 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
         ArrayList<Person> newGenAllPerson = new ArrayList<Person>();
 //        System.out.println("Current Colony Count before Breeding : "+ population.getColonyCount());
 
+        List<CompletableFuture<Colony>> futureResultList = new ArrayList<>();
+
         for(Colony c : population.colonies()){
 
-
+//            futureResultList.add(getCompetableFutureResult(c,newGenAllPerson));
             breedIntraColony(c,newGenAllPerson);
 
 
         }
+
+        ///** PARALLEL Processing for Breeding Colony wise *****************
+//        CompletableFuture[] futureResultArray = futureResultList.toArray(new CompletableFuture[futureResultList.size()]);
+//
+//        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureResultArray);
+//
+//        CompletableFuture<List<Colony>> finalResults = combinedFuture
+//                .thenApply(voidd -> futureResultList.stream().map(future -> future.join()).collect(Collectors.toList()));
+//
+//
+//        finalResults.whenComplete((result,throwable)-> {
+//            Colony colony = population.firstColony;
+//            for(Colony subarray : result){
+//                  colony = subarray;
+//                  colony = colony.nextColony;
+//            }
+//        });
+//        finalResults.join();
+        //**************************************************
+
+
+
 
 //        System.out.println("Current Colony Count After Breeding before Deleting old Pop. : "+ population.getColonyCount() + "Size"+ population.size);
 
@@ -90,6 +117,17 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 
 //        System.out.println("Current Colony Count After Breeding after Deleting old Pop: "+ population.getColonyCount() + "Size " +population.size);
 //     breedInterColony(currentColonies);
+    }
+
+    private  CompletableFuture<Colony> parsort(Colony c,ArrayList<Person> newGenAllPerson) {
+
+        return CompletableFuture.supplyAsync(
+                () -> {
+                    System.out.println("Parallel Computing ..");
+                    breedIntraColony(c,newGenAllPerson);
+                    return c;
+                }
+        );
     }
 
     public Double getThemostFittestPerson(Population population) {
