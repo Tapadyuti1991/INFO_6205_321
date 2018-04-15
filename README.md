@@ -43,8 +43,10 @@ Total Reward Point 116.89 || Total Time :960.0
 **Fitness Function**:
 It defined as the:
 
-Fitness of a Person    =     ____________ Sum of total reward points of a Person___________________
+                                         Sum of total reward points of a Person
+Fitness of a Person    =  __________________________________________________________________________
                                       Maximum Reward point that can be achieved (960)
+                                      
 In our case all the activity have reward points associated with range of 1-10points and time taken to complete each activity in span of 5 – 60 minutes. So in span of 960 minutes, one achieve maximum of 960 reward point, which is highly impossible case in experiment.   
 
 **Evolution Process**: 
@@ -59,7 +61,7 @@ Crossover process is done .1% in our each generation’s breeding process. It be
 We have constructed the Chromosome precisely to make half of its  gene sequences’s summation of activity time  equals exactly 960/2 i.e 480 minutues.(16 hours = 960 minutes)
 ```
 Parent1: 
-AAGG-ATGT-ATCT-ACTA-ATCT- AAAA-AATA-AAAG	AAGC-AGTT-AGCC-AAAG-ATGT-CAAA-CACG
+AAGG-ATGT-ATCT-ACTA-ATCT- AAAA-AATA-AAAG	**AAGC-AGTT-AGCC-AAAG-ATGT-CAAA-CACG**
  
  Parent 2: 
 CATC-ACAT-ATAG-CAAC-ATCT-ACGT-AAAA-CACG	ATCC-AAAA-ACTA-AGAC-AATA-AATA-CATA-AATC
@@ -84,6 +86,11 @@ CATC-AGTC-ATAG-CAAC-AAAY-ACGT-AAAA-CACG-AGGA-ATTG-AAAA-ATCC-AAAA-GCTA-AGAC-AATA
 For illustration I have mutated only 4 out all the genes of a person. 
 
 2.Other Half of the breeding population are simply copied from the previous generation. 
+
+**Conclusion**
+```
+As from the above graph we can see total reward points for happiness or our fitness function gets increasing as generations increases. We are culling with 0.5 ratio in each generation. After 100 generation we are getting approximately 300-400 reward points out which turns out to be an excellent solution as of activity listed out in our consideration. Thus we can inference that Genetic Algorithm repeatedly modifies the population by mutation of individual solutions to get the best solution. 
+```
 
 **Reference from Book**: 
 ```
