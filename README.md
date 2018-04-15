@@ -42,8 +42,7 @@ Total Reward Point 116.89 || Total Time :960.0
 ```
 **Fitness Function**:
 It defined as the:
-
-                                         Sum of total reward points of a Person
+                                          Sum of total reward points of a Person          
 Fitness of a Person    =  __________________________________________________________________________
                                       Maximum Reward point that can be achieved (960)
                                       
