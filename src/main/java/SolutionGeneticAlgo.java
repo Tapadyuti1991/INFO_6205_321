@@ -5,7 +5,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 //DO Breeding in Parallel
-//8he constraint
 public class SolutionGeneticAlgo {
 
     ActivityNodeGraph graph;
@@ -31,8 +30,6 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
     }
 }
 
-
-
     public Double[] doEvolution(){
 
     logger.info("Evolution Process Started ... ");
@@ -42,8 +39,6 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
         logger.info("************************************************");
         logger.info("Generation"+ noOfEvolution);
         breedTheCurrentPopulation(population);
-//        testtheCurrentPopulation(noOfEvolution);
-//        applySurvivalOfFittest(population,noOfEvolution);
         Double bp = getThemostFittestPerson(population);
         allBestPerson[noOfEvolution] = bp;
 //        testtheCurrentPopulation(noOfEvolution);
@@ -54,11 +49,9 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 }
 
     private void breedTheCurrentPopulation(Population population) {
-//    Colony [] currentColonies = new Colony[population.getColonyCount()];
 //        System.out.println("Breeding the Current Population ....");
         int countColony = 0;
         ArrayList<Person> newGenAllPerson = new ArrayList<Person>();
-//        System.out.println("Current Colony Count before Breeding : "+ population.getColonyCount());
 
         List<CompletableFuture<Colony>> futureResultList = new ArrayList<>();
 
@@ -89,34 +82,10 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
 //        finalResults.join();
         //**************************************************
 
-
-
-
-//        System.out.println("Current Colony Count After Breeding before Deleting old Pop. : "+ population.getColonyCount() + "Size"+ population.size);
-
         population.deleteAllColony();
-
-//        System.out.println("Current Pop Size After Breeding After Deleting old Pop. : "+  population.getColonyCount() + "Size"+ population.size);
-
-        int popCount = 0;
-//        System.out.println("Total Number of New Persons to be added "+ newGenAllPerson.size());
         for(Person p : newGenAllPerson) {
             population.addPerson(p);
-//        System.out.println("Total Colony :" + population.getColonyCount()+" ");
-//
-//        int Ccount = 0;
-//        for(Colony c :population.colonies()) {
-//            System.out.print("Colony :" + Ccount+" ");
-//            Ccount++;
-//            System.out.println("NO. of Person in CoLony :" + c.size());
-//        }
-//        popCount ++;
-//        System.out.println("******");
-//        System.out.println("Adding New Persons to Population"+ popCount);
         }
-
-//        System.out.println("Current Colony Count After Breeding after Deleting old Pop: "+ population.getColonyCount() + "Size " +population.size);
-//     breedInterColony(currentColonies);
     }
 
     private  CompletableFuture<Colony> parsort(Colony c,ArrayList<Person> newGenAllPerson) {
@@ -131,7 +100,6 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
     }
 
     public Double getThemostFittestPerson(Population population) {
-//            System.out.println("Getting Most Fittest Person...");
             Double bestPerson = null;
             if(population.size > Configuration.MaximumNumberOfPopulation)
             {
@@ -142,14 +110,9 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
                 for (Colony c : population.colonies()) {
 
                         for(Person p: c.getAllPerson()){
-//                            System.out.print(" TT :"+ p.getTotalTimeSpent());
-//                            System.out.print(" TRP:  "+ p.getfitnessScore());
-//                            System.out.print(p.getAllGeneSequence());
                             pq.insert(p);
-
                             if(pq.size() > minpqSize){
                                 Person delp = pq.delMin();
-//                                System.out.println("Person with "+ delp.getfitnessScore()+"Points deleted ");
                             }
                         }
                 }
@@ -167,7 +130,7 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
                 }
                 logger.info(act);
                 population.deleteAllColony();
-//                System.out.println("Population Colony Count <<<< "+ population.getColonyCount() + "Size " +population.size);
+
                 Person [] randP = new Person[p.size()];
                 int randCount = 0;
                 for(Person randPerson:p){
@@ -188,10 +151,9 @@ SolutionGeneticAlgo(ActivityNodeGraph graph,GeneSymbolTable geneST){
                 for(int i=0;i<randP.length;i++){
                     population.addPerson(randP[i]);
                 }
-//                System.out.println("Population Colony Count <<<< "+ population.getColonyCount() + "Size " +population.size);
             }
             else{
-//                System.out.println("Culling Skipped As Total Population < Maximum Expected ");
+                System.out.println("Culling Skipped As Total Population < Maximum Expected ");
             }
 //        System.out.println("Getting Most Fittest Person done...");
         return bestPerson;
