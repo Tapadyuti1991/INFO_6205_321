@@ -88,9 +88,8 @@ For illustration I have mutated only 4 out all the genes of a person.
 2.Other Half of the breeding population are simply copied from the previous generation. 
 
 **Conclusion**
-```
-As from the above graph we can see total reward points for happiness or our fitness function gets increasing as generations increases. We are culling with 0.5 ratio in each generation. After 100 generation we are getting approximately 300-400 reward points out which turns out to be an excellent solution as of activity listed out in our consideration. Thus we can inference that Genetic Algorithm repeatedly modifies the population by mutation of individual solutions to get the best solution. 
-```
+
+>As from the above graph we can see total reward points for happiness or our fitness function gets increasing as generations increases. We are culling with 0.5 ratio in each generation. After 100 generation we are getting approximately 300-400 reward points out which turns out to be an excellent solution as of activity listed out in our consideration. Thus we can infer that Genetic Algorithm repeatedly modifies the population by mutation of individual solutions to get the best solution. 
 
 **Reference from Book**: 
 ```
