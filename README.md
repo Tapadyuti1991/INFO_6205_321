@@ -1,13 +1,14 @@
-# INFO_6205_321
-Genetic Algorithm
+# INFO_6205_321 Team 321 Final Project - Spring 2018 
 # Genetic Algorithm: The Happiness Pursuit (Knapsack Problem)
-### Tapadyuti Maiti | Simi Golbert Foss 
+### Tapadyuti Maiti -001225572 | Simi Golbert Foss -001286453 
 **Files to look**
+
 ExperimentData.xlsx
 Report_GA_Team_321.docx
 GApresentation.pptx
 
 **Instruction to Run**
+
 Download the Project - and run the Driver.java file,all the dependency are presrnt in the Maven file.Number of Evolution and other paramter can be changed in the Configuration.java file. 
 
 **Problem**: 
