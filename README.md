@@ -2,6 +2,14 @@
 Genetic Algorithm
 # Genetic Algorithm: The Happiness Pursuit (Knapsack Problem)
 ### Tapadyuti Maiti | Simi Golbert Foss 
+**Files to look**
+ExperimentData.xlsx
+Report_GA_Team_321.docx
+GApresentation.pptx
+
+**Instruction to Run**
+Download the Project - and run the Driver.java file,all the dependency are presrnt in the Maven file.Number of Evolution and other paramter can be changed in the Configuration.java file. 
+
 **Problem**: 
 We have chosen the specific problem of finding the exact trail of activities list to achieve the maximum happiness factor through the day through Genetic Algorithm. Though this problem is essentially maps into Knapsack Problem, but we had faced few major roadblocks to convert it into solid code. 
 
