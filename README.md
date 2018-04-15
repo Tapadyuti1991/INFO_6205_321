@@ -2,7 +2,7 @@
 # Genetic Algorithm: The Happiness Pursuit (Knapsack Problem)
 ### Tapadyuti Maiti -001225572 | Simi Golbert Foss -001286453  Final Project - Spring 2018
 **Files to look**
-
+HList.xlsx
 ExperimentData.xlsx
 Report_GA_Team_321.docx
 GApresentation.pptx
