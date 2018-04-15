@@ -42,9 +42,8 @@ Total Reward Point 116.89 || Total Time :960.0
 ```
 **Fitness Function**:
 It defined as the:
-                                          Sum of total reward points of a Person          
-Fitness of a Person    =  __________________________________________________________________________
-                                      Maximum Reward point that can be achieved (960)
+>
+Fitness of a Person    =        Sum of total reward points of a Person  /   Maximum Reward point that can be achieved (960)       
                                       
 In our case all the activity have reward points associated with range of 1-10points and time taken to complete each activity in span of 5 – 60 minutes. So in span of 960 minutes, one achieve maximum of 960 reward point, which is highly impossible case in experiment.   
 
