@@ -10,14 +10,20 @@ We have chosen the specific problem of finding the exact trail of activities lis
 We have found out list of 78 Activities and ranked them accordingly with its reward points associated with the approximate time taken to finish it. We accept the fact that these reward point can vary person to person.
 
 **Implementation Detail**: 
-'''
+
 Flow of Data: Sequentially Downwards which wraps all the downwards entity.
- Generation: It contains whole population.
+Generation: It contains whole population.
+
 Population: Consists of Many Colonies 
+
 Colonies: Constraint of containing a no more than specific number of Persons in it.
+
 Persons: It contains a Chromosome 
-Chromosome: Defining Character of Person through List of Activity 
+
+Chromosome: Defining Character of Person through List of Activity
+
 Set of Genes: Represent Specific Activity Encoded by specific A-G-T-C Sequence which may or may not be same with another Person, as happens Naturally.
+
 ```
 Following Steps were implemented sequentially to solve the problem through genetic algorithm: 
 1.	Load Data from Excel Sheet and initialise Gene Symbol Table
@@ -42,8 +48,7 @@ Total Reward Point 116.89 || Total Time :960.0
 ```
 **Fitness Function**:
 It defined as the:
->
-Fitness of a Person    =        Sum of total reward points of a Person  /   Maximum Reward point that can be achieved (960)       
+>Fitness of a Person    =        Sum of total reward points of a Person  /   Maximum Reward point that can be achieved (960)       
                                       
 In our case all the activity have reward points associated with range of 1-10points and time taken to complete each activity in span of 5 – 60 minutes. So in span of 960 minutes, one achieve maximum of 960 reward point, which is highly impossible case in experiment.   
 
@@ -57,30 +62,30 @@ In the end, after sorting the whole population based on there fitness score in M
 **Mutation and Cross Over Process**:
 Crossover process is done .1% in our each generation’s breeding process. It been done by cutting the Parents Gene in two Parts and replacing the second half from another Parent’s gene.
 We have constructed the Chromosome precisely to make half of its  gene sequences’s summation of activity time  equals exactly 960/2 i.e 480 minutues.(16 hours = 960 minutes)
-```
+
 Parent1: 
 AAGG-ATGT-ATCT-ACTA-ATCT- AAAA-AATA-AAAG	**AAGC-AGTT-AGCC-AAAG-ATGT-CAAA-CACG**
  
- Parent 2: 
-CATC-ACAT-ATAG-CAAC-ATCT-ACGT-AAAA-CACG	ATCC-AAAA-ACTA-AGAC-AATA-AATA-CATA-AATC
+Parent 2: 
+CATC-ACAT-ATAG-CAAC-ATCT-ACGT-AAAA-CACG	**ATCC-AAAA-ACTA-AGAC-AATA-AATA-CATA-AATC**
 
 Child 1
-AAGG-ATGT-ATCT-ACTA-ATCT- AAAA-AATA-AAAG	ATCC-AAAA-ACTA-AGAC-AATA-AATA-CATA-AATC
+AAGG-ATGT-ATCT-ACTA-ATCT- AAAA-AATA-AAAG	**ATCC-AAAA-ACTA-AGAC-AATA-AATA-CATA-AATC**
 
 Child2:
-CATC-ACAT-ATAG-CAAC-ATCT-ACGT-AAAA-CACG	AAGC-AGTT-AGCC-AAAG-ATGT-CAAA-CACG
-```
+CATC-ACAT-ATAG-CAAC-ATCT-ACGT-AAAA-CACG	**AAGC-AGTT-AGCC-AAAG-ATGT-CAAA-CACG**
+
 While half of the remaining 90% of breeding is mutated in the following manner: 
 1.Selecting random 10 positions of Array List of Genes and then mutating it with some other activity of same time span from the Gene Pool table (where all the Genes are present for reference) 
 
 
-```
+
 Parent : 
-CATC-ACAT-ATAG-CAAC-ATCT-ACGT-AAAA-CACG-AGGA-AAAG-AAAA-ATCC-AAAA-ACTA-AGAC-AATA
+CATC-**ACAT**-ATAG-CAAC-**ATCT**-ACGT-AAAA-CACG-AGGA-**AAAG**-AAAA-ATCC-AAAA-**ACTA**-AGAC-AATA
 
  Child:
-CATC-AGTC-ATAG-CAAC-AAAY-ACGT-AAAA-CACG-AGGA-ATTG-AAAA-ATCC-AAAA-GCTA-AGAC-AATA
- ```
+CATC-**AGTC**-ATAG-CAAC-**AAAY**-ACGT-AAAA-CACG-AGGA-**ATTG**-AAAA-ATCC-AAAA-**GCTA**-AGAC-AATA
+
 For illustration I have mutated only 4 out all the genes of a person. 
 
 2.Other Half of the breeding population are simply copied from the previous generation. 
