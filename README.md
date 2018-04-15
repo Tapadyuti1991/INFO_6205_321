@@ -1,6 +1,6 @@
-# INFO_6205_321 Team 321 Final Project - Spring 2018 
+# INFO_6205_321 Team 321  
 # Genetic Algorithm: The Happiness Pursuit (Knapsack Problem)
-### Tapadyuti Maiti -001225572 | Simi Golbert Foss -001286453 
+### Tapadyuti Maiti -001225572 | Simi Golbert Foss -001286453  Final Project - Spring 2018
 **Files to look**
 
 ExperimentData.xlsx
