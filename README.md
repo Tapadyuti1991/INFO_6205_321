@@ -85,3 +85,13 @@ For illustration I have mutated only 4 out all the genes of a person.
 
 2.Other Half of the breeding population are simply copied from the previous generation. 
 
+**Reference from Book**: 
+```
+•	Algorithhms 4th Edition by Robert Sedgewick, Kevin Wayne
+Reference for Ranking the Activities : 
+•	happify.com
+•	https://www.hongkiat.com/blog/how-to-increase-happiness/
+•	https://technologyadvice.com/blog/information-technology/activate-chemicals-gamify-happiness-nicole-lazzaro/
+```
+
+
