@@ -12,6 +12,7 @@ We have found out list of 78 Activities and ranked them accordingly with its rew
 **Implementation Detail**: 
 
 Flow of Data: Sequentially Downwards which wraps all the downwards entity.
+
 Generation: It contains whole population.
 
 Population: Consists of Many Colonies 
@@ -92,7 +93,7 @@ For illustration I have mutated only 4 out all the genes of a person.
 
 **Conclusion**
 
->As from the above graph we can see total reward points for happiness or our fitness function gets increasing as generations increases. We are culling with 0.5 ratio in each generation. After 100 generation we are getting approximately 300-400 reward points out which turns out to be an excellent solution as of activity listed out in our consideration. Thus we can infer that Genetic Algorithm repeatedly modifies the population by mutation of individual solutions to get the best solution. 
+>After 100 generation we are getting approximately 300-400 reward points out which turns out to be an excellent solution as of activity listed out in our consideration. Thus we can infer that Genetic Algorithm repeatedly modifies the population by mutation of individual solutions to get the best solution.Please refer the Excel Sheet/Report for more details of experiment data.
 
 **Reference from Book**: 
 ```
@@ -104,5 +105,7 @@ For illustration I have mutated only 4 out all the genes of a person.
 •	https://www.hongkiat.com/blog/how-to-increase-happiness/
 •	https://technologyadvice.com/blog/information-technology/activate-chemicals-gamify-happiness-nicole-lazzaro/
 ```
-
+```
+** Thank you **
+```
 
