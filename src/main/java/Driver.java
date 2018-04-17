@@ -17,7 +17,7 @@ import java.util.Iterator;
     with other Person, as happens Naturally.
  */
 public class Driver  {
-    public static final String SAMPLE_XLSX_FILE_PATH = ".\\HList.xlsx"; //Refer the Excel sheet for List of Activities
+    public static final String SAMPLE_XLSX_FILE_PATH = "..\\HList.xlsx"; //Refer the Excel sheet for List of Activities
     static String [] Activity;
     static Double [] Timetaken;
     static Double [] Reward;

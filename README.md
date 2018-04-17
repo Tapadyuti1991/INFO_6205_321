@@ -12,7 +12,21 @@ GApresentation.pptx : Presentation of whole Project
 
 **Instruction to Run**
 
-Download the Project - and run the Driver.java file,all the dependency are presrnt in the Maven file.Number of Evolution and other paramter can be changed in the Configuration.java file. 
+Download the Project - Number of Evolution and other parameter can be changed in the Configuration.java file.
+Follow the below commands
+
+Go to INFO_6205_321 folder
+
+open cmd
+
+mvn clean install
+
+cd target
+
+java -jar GA_Perfect_Happiness-1.0-SNAPSHOT.jar
+
+Note: Maven should be installed in the System.
+ 
 
 **Problem**: 
 We have chosen the specific problem of finding the exact trail of activities list to achieve the maximum happiness factor through the day through Genetic Algorithm. Though this problem is essentially maps into Knapsack Problem, but we had faced few major roadblocks to convert it into solid code. 
